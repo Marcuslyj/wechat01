@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "koa": "^2.7.0",
-    "sha1": "^1.1.1"
+    "raw-body": "^2.4.1",
+    "sha1": "^1.1.1",
+    "xml2js": "^0.4.19"
   }
 }
