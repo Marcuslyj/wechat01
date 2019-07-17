@@ -10,16 +10,36 @@ exports.initSchemas = () => {
         .forEach(require)
 }
 
-exports.connect = db => new Promise((resolve, reject) => {
-    mongoose.connect(db)
-    mongoose.connection.on('disconnect', () => {
-        console.log('数据库挂了吧');
+exports.connect = db => {
+    let maxConnectTimes = 0
+
+    return new Promise((resolve, reject) => {
+        if (process.env.NODE_ENV !== 'production') {
+            mongoose.set('debug', true)
+        }
+
+        mongoose.connect(db)
+        mongoose.connection.on('disconnect', () => {
+            maxConnectTimes++
+            if (maxConnectTimes < 5) {
+                mongoose.connect(db)
+
+            } else {
+                throw new Error('数据库挂了吧')
+            }
+        })
+        mongoose.connection.on('error', err => {
+            maxConnectTimes++
+            if (maxConnectTimes < 5) {
+                mongoose.connect(db)
+
+            } else {
+                throw new Error('数据库挂了吧')
+            }
+        })
+        mongoose.connection.on('open', () => {
+            resolve()
+            console.log('MongoDB connected');
+        })
     })
-    mongoose.connection.on('error', err => {
-        console.log(err);
-    })
-    mongoose.connection.on('open', () => {
-        resolve()
-        console.log('MongoDB connected');
-    })
-})
+}
