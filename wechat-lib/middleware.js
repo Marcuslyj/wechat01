@@ -1,6 +1,7 @@
 const sha1 = require('sha1')
 const getRawBody = require('raw-body')
 const util = require('./util.js')
+const { reply } = require('../wechat/reply.js')
 
 module.exports = config => async (ctx, next) => {
     const { signature, timestamp, nonce, echostr } = ctx.query
@@ -29,18 +30,17 @@ module.exports = config => async (ctx, next) => {
 
         const content = await util.parseXML(data)
         const message = util.formatMessage(content.xml)
+        // 赋值给ctx
+        ctx.weixin = message
+
+        await reply.apply(ctx, [ctx, next])
+
+        const replyBody = ctx.body
+        const msg = ctx.weixin
+        const xml = util.tpl(replyBody, msg)
 
         ctx.status = 200
         ctx.type = 'application/xml'
-        let xml =
-            `<xml>
-                <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
-                <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
-                <CreateTime>${parseInt(new Date().getTime() / 1000, 0)}</CreateTime>
-                <MsgType><![CDATA[text]]></MsgType>
-                <Content><![CDATA[${message.Content}]]></Content>
-            </xml>`
-
         ctx.body = xml
     }
 }
