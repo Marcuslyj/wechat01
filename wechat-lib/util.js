@@ -1,6 +1,7 @@
 const xml2js = require('xml2js')
 const template = require('./tpl')
 
+// 解析xml成json对象
 exports.parseXML = xml => new Promise((resolve, reject) => {
     xml2js.parseString(xml, { trim: true }, (err, content) => {
         if (err) reject(err)
@@ -38,6 +39,9 @@ exports.formatMessage = result => {
             }
         }
     }
+    console.log('====================================');
+    console.log(message);
+    console.log('====================================');
     return message
 }
 

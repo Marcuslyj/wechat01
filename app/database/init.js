@@ -9,7 +9,7 @@ exports.initSchemas = () => {
         .sync(path.resolve(__dirname, './schema', '**.*js'))
         .forEach(require)
 }
-
+// 链接数据库
 exports.connect = db => {
     let maxConnectTimes = 0
 
