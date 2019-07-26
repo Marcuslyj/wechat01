@@ -39,9 +39,6 @@ exports.formatMessage = result => {
             }
         }
     }
-    console.log('====================================');
-    console.log(message);
-    console.log('====================================');
     return message
 }
 

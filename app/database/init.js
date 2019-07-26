@@ -18,11 +18,11 @@ exports.connect = db => {
             mongoose.set('debug', true)
         }
 
-        mongoose.connect(db)
+        mongoose.connect(db, { useNewUrlParser: true })
         mongoose.connection.on('disconnect', () => {
             maxConnectTimes++
             if (maxConnectTimes < 5) {
-                mongoose.connect(db)
+                mongoose.connect(db, { useNewUrlParser: true })
 
             } else {
                 throw new Error('数据库挂了吧')
@@ -31,7 +31,7 @@ exports.connect = db => {
         mongoose.connection.on('error', err => {
             maxConnectTimes++
             if (maxConnectTimes < 5) {
-                mongoose.connect(db)
+                mongoose.connect(db, { useNewUrlParser: true })
 
             } else {
                 throw new Error('数据库挂了吧')

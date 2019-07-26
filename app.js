@@ -5,8 +5,9 @@ const { initSchemas, connect } = require('./app/database/init.js')
 
 
     ; (async () => {
+        // 连接数据库
         await connect(config.db)
-
+        // 初始化MongooseSchema
         initSchemas()
 
 

@@ -16,7 +16,7 @@ module.exports = class Wechat {
 
         this.fetchAccessToken()
     }
-
+    // 请求方法
     async request(options) {
         options = {
             ...options,
@@ -45,7 +45,7 @@ module.exports = class Wechat {
 
         return data
     }
-    // 获取新的token
+    // 向微信端请求token
     async updateAccessToken() {
         const url = `${api.accessToken}&appid=${this.appID}&secret=${this.appSecret}`
 
