@@ -10,11 +10,6 @@ const { initSchemas, connect } = require('./app/database/init.js')
         // 初始化MongooseSchema
         initSchemas()
 
-
-        // 测试token的数据库存储
-        const { test } = require('./wechat/index.js')
-        await test()
-
         const app = new Koa()
         // 你问我答中间件
         app.use(wechat(config.wechat))

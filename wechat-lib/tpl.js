@@ -1,7 +1,7 @@
 const ejs = require('ejs')
 
 const tpl =
-`<xml>
+    `<xml>
     <ToUserName>
         <![CDATA[<%= toUserName %>]]>
     </ToUserName>
@@ -17,6 +17,7 @@ const tpl =
         <![CDATA[<%- content %>]]>
     </Content>
     <% } else if (msgType === 'image') { %>
+    <MsgType><![CDATA[image]]></MsgType>
     <Image>
         <MediaId>
             <![CDATA[<%= content.mediaId %>]]>
@@ -29,6 +30,7 @@ const tpl =
         </MediaId>
     </Voice>
     <% } else if (msgType === 'video') { %>
+    <MsgType><![CDATA[video]]></MsgType>
     <Video>
         <MediaId>
             <![CDATA[<%= content.mediaId %>]]>

@@ -1,9 +1,13 @@
+const fs = require('fs')
 const request = require('request-promise')
 
 const base = 'https://api.weixin.qq.com/cgi-bin/'
 
 const api = {
-    accessToken: base + 'token?grant_type=client_credential'
+    accessToken: base + 'token?grant_type=client_credential',
+    temporary: {
+        upload: base + 'media/upload?'
+    }
 }
 
 module.exports = class Wechat {
@@ -71,5 +75,32 @@ module.exports = class Wechat {
         } else {
             return false
         }
+    }
+    // 上传材料
+    uploadMaterial(token, type, material, permanent = false) {
+        let form = {}
+        let url = api.temporary.upload
+        if (permanent) {
+
+        }
+        form.media = fs.createReadStream(material)
+        let uploadUrl = `${url}access_token=${token}&type=${type}`
+        const options = {
+            method: 'POST',
+            url: uploadUrl,
+            json: true,
+            formData: form
+        }
+        return options
+    }
+    async handle(operation, ...args) {
+        const token = await this.fetchAccessToken()
+        console.log('====================================');
+        console.log(token);
+        console.log('====================================');
+        const options = this[operation](token.access_token, ...args)
+        const data = await this.request(options)
+        console.log(data);
+        return data
     }
 }

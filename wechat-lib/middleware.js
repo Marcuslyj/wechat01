@@ -43,6 +43,10 @@ module.exports = config => async (ctx, next) => {
         // 格式化成相应xml格式
         const xml = util.tpl(replyBody, msg)
 
+        console.log('====================================');
+        console.log(xml);
+        console.log('====================================');
+
         ctx.status = 200
         ctx.type = 'application/xml'
         ctx.body = xml
