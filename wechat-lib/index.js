@@ -95,12 +95,8 @@ module.exports = class Wechat {
     }
     async handle(operation, ...args) {
         const token = await this.fetchAccessToken()
-        console.log('====================================');
-        console.log(token);
-        console.log('====================================');
         const options = this[operation](token.access_token, ...args)
         const data = await this.request(options)
-        console.log(data);
         return data
     }
 }

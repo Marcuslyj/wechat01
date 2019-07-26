@@ -19,7 +19,6 @@ exports.reply = async (ctx, next) => {
         }
         else if (content === '4') {
             let data = await client.handle('uploadMaterial', 'image', path.resolve(__dirname, '../2.jpg'))
-            console.log(data)
             reply = {
                 type: 'image',
                 mediaId: data.media_id
