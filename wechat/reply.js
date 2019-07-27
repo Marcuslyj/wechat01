@@ -77,7 +77,7 @@ exports.reply = async (ctx, next) => {
                     },
                     {
                         "title": "这是服务端上传的图文 2",
-                        "thumb_media_id": data2.media_id,
+                        "thumb_media_id": data.media_id,
                         "author": "Angus",
                         "digest": "没有摘要",
                         "show_cover_pic": 1,
@@ -87,10 +87,24 @@ exports.reply = async (ctx, next) => {
                 ],
             };
             let uploadData = await client.handle('uploadMaterial', "news", media, {});
-            reply = {
-                type: 'image',
-                mediaId: data.media_id,
-            };
+            let newsData = await client.handle('fetchMaterial', uploadData.media_id, 'news', {})
+
+            let items = newsData.news_item
+            let news = []
+
+            if (items) {
+                items.forEach(item => {
+                    news.push({
+                        title: item.title,
+                        description: item.description,
+                        picUrl: data2.url,
+                        url: item.url,
+                    })
+                })
+            }
+
+            reply = news;
+
             if (!data.media_id) {
                 reply = "尚未通过微信认证，无法调用接口～";
             }

@@ -7,7 +7,8 @@ const api = {
     accessToken: base + 'token?grant_type=client_credential',
     // 临时上传
     temporary: {
-        upload: base + 'media/upload?'
+        upload: base + 'media/upload?',
+        fetch: base + 'media/get?',
     },
     // 永久上传
     permanent: {
@@ -183,6 +184,32 @@ module.exports = class Wechat {
             url,
             body: options,
         };
+    }
+    // 获取素材
+    fetchMaterial(token, mediaId, type, permanent) {
+        let form = {}
+        let fetchUrl = api.temporary.fetch
+        if (permanent) {
+            fetchUrl = api.permanent.fetch
+        }
+
+        let url = `${fetchUrl}access_token=${token}`
+        const options = {
+            method: 'POST',
+            url,
+        }
+
+        if (permanent) {
+            form.media_id = mediaId
+            form.access_token = token
+            options.body = form
+        } else {
+            if ('video' === type) {
+                url = url.replace("https", "http")
+                url += "&media_id=" + mediaId
+            }
+        }
+        return options
     }
 
     async handle(operation, ...args) {
