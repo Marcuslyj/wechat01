@@ -13,7 +13,8 @@ const api = {
     permanent: {
         upload: base + 'material/add_material?',
         uploadNews: base + 'material/add_news?',
-        uploadNewsPic: base + 'material/upload_img?',
+        uploadNewsPic: base + 'material/uploadimg?',
+
         fetch: base + 'material/get_material?',
         batch: base + 'material/batchget_material?',
         count: base + 'material/get_materialcount?',
@@ -55,9 +56,10 @@ module.exports = class Wechat {
         if (!this.isValidToken(data)) {
             // 过期重新获取
             data = await this.updateAccessToken()
+            // 本地保存token
+            await this.saveAccessToken(data)
         }
-        // 本地保存token
-        await this.saveAccessToken(data)
+
 
         return data
     }
@@ -92,9 +94,9 @@ module.exports = class Wechat {
     uploadMaterial(token, type, material, permanent = false) {
         let form = {}
         let url = api.temporary.upload
+
         if (permanent) {
             url = api.permanent.upload
-            //??
             form = Object.assign(form, permanent)
         }
         if ('pic' === type) {
@@ -102,7 +104,7 @@ module.exports = class Wechat {
         }
         if ('news' === type) {
             url = api.permanent.uploadNews
-            form.material
+            form = material
         } else {
             form.media = fs.createReadStream(material)
         }
@@ -113,6 +115,10 @@ module.exports = class Wechat {
         } else {
             if (type !== 'news') {
                 form.access_token = token;
+                // 其他永久素材（第三个接口）
+                if (type !== 'pic') {
+                    uploadUrl += `&type=${type}`
+                }
             }
         }
 
@@ -125,6 +131,7 @@ module.exports = class Wechat {
         if ('news' === type) {
             options.body = form
         } else {
+            //  要求formdata
             options.formData = form
         }
 
@@ -133,7 +140,7 @@ module.exports = class Wechat {
 
     deleteMaterial(token, mediaId) {
         const form = {
-            media_id = mediaId
+            media_id: mediaId
         }
         let url = `${api.permanent.del}access_token=${token}&media_id=${mediaId}`
 
@@ -181,6 +188,7 @@ module.exports = class Wechat {
     async handle(operation, ...args) {
         const token = await this.fetchAccessToken()
         const options = this[operation](token.access_token, ...args)
+
         const data = await this.request(options)
         return data
     }

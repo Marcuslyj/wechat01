@@ -42,20 +42,26 @@ exports.reply = async (ctx, next) => {
                 description: '吃个鸡？',
                 mediaId: data.media_id
             }
+            if (!data.media_id) {
+                reply = "尚未通过微信认证，无法调用接口～";
+            }
         }
         else if ("7" === content) {
-            let data = await client.handle('uploadMaterial', 'image', resolve(__dirname, '../2.jpg'), {
+            let data = await client.handle('uploadMaterial', 'image', path.resolve(__dirname, '../2.jpg'), {
                 type: 'image',
             });
             reply = {
                 type: 'image',
                 mediaId: data.media_id,
             };
+            if (!data.media_id) {
+                reply = "尚未通过微信认证，无法调用接口～";
+            }
         } else if ("8" === content) {
-            let data = await client.handle('uploadMaterial', 'image', resolve(__dirname, '../2.jpg'), {
+            let data = await client.handle('uploadMaterial', 'image', path.resolve(__dirname, '../2.jpg'), {
                 type: 'image',
             });
-            let data2 = await client.handle('uploadMaterial', 'pic', resolve(__dirname, '../2.jpg'), {
+            let data2 = await client.handle('uploadMaterial', 'pic', path.resolve(__dirname, '../2.jpg'), {
                 type: 'image',
             });
             let media = {
@@ -85,6 +91,9 @@ exports.reply = async (ctx, next) => {
                 type: 'image',
                 mediaId: data.media_id,
             };
+            if (!data.media_id) {
+                reply = "尚未通过微信认证，无法调用接口～";
+            }
         } else if ("9" === content) {
             let counts = await client.handle('countMaterial');
             let res = await Promise.all([
@@ -109,13 +118,16 @@ exports.reply = async (ctx, next) => {
                     count: 10
                 }),
             ]);
-            console.log(res);
+
             reply = `
             image: ${res[0].total_count}
             video: ${res[1].total_count}
             voice: ${res[2].total_count}
             news: ${res[3].total_count}
             `
+            if (!res[0].total_count) {
+                reply = "尚未通过微信认证，无法调用接口～";
+            }
         }
 
         ctx.body = reply

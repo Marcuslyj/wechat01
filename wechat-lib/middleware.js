@@ -21,6 +21,7 @@ module.exports = config => async (ctx, next) => {
         if (sha !== signature) {
             return (ctx.body = 'Failed')
         }
+
         // 接受原始数据的库，获取原始数据
         const data = await getRawBody(ctx.req, {
             length: ctx.length,
