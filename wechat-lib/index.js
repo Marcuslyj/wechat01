@@ -32,6 +32,9 @@ const api = {
         batchUnTag: base + 'tags/members/batchuntagging?',
         getUserTags: base + 'tags/getidlist?',
     },
+    user: {
+        fetch: base + 'user/get?',
+    }
 }
 
 module.exports = class Wechat {
@@ -301,6 +304,12 @@ module.exports = class Wechat {
             method: 'POST',
             url,
             body,
+        };
+    }
+    getUsers(token, openId) {
+        let url = `${api.user.fetch}access_token=${token}&next_openid=${openId || ''}`;
+        return {
+            url,
         };
     }
 

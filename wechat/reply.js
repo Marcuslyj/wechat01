@@ -179,6 +179,13 @@ exports.reply = async (ctx, next) => {
             if (!tagsData.tags) {
                 reply = "尚未通过微信认证，无法调用接口～";
             }
+        } else if ("11" == content) {
+            let users = await client.handle('getUsers');
+            if (!users.total) {
+                reply = "尚未通过微信认证，无法调用接口～";
+            }else{
+                reply = `用户${users.total}个`
+            }
         }
 
         ctx.body = reply
