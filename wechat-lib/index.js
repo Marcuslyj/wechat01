@@ -34,6 +34,7 @@ const api = {
     },
     user: {
         fetch: base + 'user/get?',
+        remark: base + 'user/info/updateremark?',
     }
 }
 
@@ -310,6 +311,19 @@ module.exports = class Wechat {
         let url = `${api.user.fetch}access_token=${token}&next_openid=${openId || ''}`;
         return {
             url,
+        };
+    }
+    // 备注用户名
+    remarkUser(token, openId, remark) {
+        let body = {
+            openid: openId,
+            remark: remark,
+        };
+        let url = `${api.user.remark}access_token=${token}`;
+        return {
+            method: 'POST',
+            url,
+            body,
         };
     }
 
