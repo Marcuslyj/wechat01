@@ -35,6 +35,7 @@ const api = {
     user: {
         fetch: base + 'user/get?',
         remark: base + 'user/info/updateremark?',
+        info: base + 'user/info?',
     }
 }
 
@@ -326,7 +327,14 @@ module.exports = class Wechat {
             body,
         };
     }
-
+    // 获取用户基本信息
+    getUserInfo(token, openId, lang = "zh_CN") {
+        let url = `${api.user.info}access_token=${token}&openid=${openId}&lang=${lang}`;
+        return {
+            url,
+        };
+    }
+    // 操作处理函数
     async handle(operation, ...args) {
         const token = await this.fetchAccessToken()
         const options = this[operation](token.access_token, ...args)

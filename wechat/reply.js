@@ -189,6 +189,9 @@ exports.reply = async (ctx, next) => {
         } else if ("12" === content) {
             let res = await client.handle('remarkUser', message.FromUserName, 'MENTOR');
             reply = `${!res.errcode ? '您的备注现在是MENTOR' : '12.尚未通过微信认证，无法调用接口～'}`;
+        } else if ("13" === content) {
+            let data = await client.handle('getUserInfo', message.FromUserName);
+            reply = `${data.openid ? JSON.stringify(data) : '13.尚未通过微信认证，无法调用接口～'}`;
         }
 
         ctx.body = reply
