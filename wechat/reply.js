@@ -202,6 +202,15 @@ exports.reply = async (ctx, next) => {
             reply = `${data.user_info_list ? JSON.stringify(data) : '14.公众号尚未通过微信认证，无法调用接口～'}`;
         }
 
+        // 获取地理位置
+        if ('event' === message.MsgType) {
+            let reply = '';
+            if ("LOCATION" === message.Event) {
+                reply = `您上报的位置是：${message.Latitude}-${message.Longitude}-${message.Precision}`;
+                context.body = reply;
+            }
+        }
+
         ctx.body = reply
     }
     await next()
