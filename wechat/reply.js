@@ -224,13 +224,7 @@ exports.reply = async (ctx, next) => {
                 }
             };
             let ticketData = await client.handle('createQrcode', qrData);
-            console.log('====================================');
-            console.log(ticketData);
-            console.log('====================================');
             let qr = client.showQrcode(ticketData.ticket);
-            console.log('====================================');
-            console.log(qr);
-            console.log('====================================');
             reply = ticketData.ticket ? qr : '16.公众号尚未通过微信认证，无法调用接口～';
         } else if ("17" === content) {
             let longUrl = "http://shang.qq.com/email/stop/email_stop.html?qq=3027677825&sig=083194b1effe19859c6add1d0e4e72e4b634b33db21a3d2c&tttt=1";
@@ -245,6 +239,10 @@ exports.reply = async (ctx, next) => {
             };
             let searchData = await client.handle('semantic', semanticData);
             reply = !searchData.errcode ? JSON.stringify(searchData) : '18.公众号尚未通过微信认证，无法调用接口～';
+        } else if ("19" === content) {
+            let body = "编程语言难学吗？";
+            let data = await client.handle('aiTranslate', body, 'zh_CN', 'en_US');
+            reply = data.to_content ? data.to_content : '19.公众号尚未通过微信认证，无法调用接口～';
         }
 
         // 获取地理位置

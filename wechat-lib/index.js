@@ -48,6 +48,9 @@ const api = {
         create: base + 'shorturl?',
     },
     semanticUrl,
+    ai: {
+        translate: base + 'media/voice/translatecontent?',
+    },
 }
 
 module.exports = class Wechat {
@@ -384,7 +387,7 @@ module.exports = class Wechat {
             body,
         };
     }
-
+    // 语义
     semantic(token, semanticData) {
         let url = `${api.semanticUrl}access_token=${token}`;
         semanticData.appid = this.appID;
@@ -392,6 +395,15 @@ module.exports = class Wechat {
             method: 'POST',
             url,
             body: semanticData,
+        };
+    }
+    // 翻译
+    aiTranslate(token, body, lfrom, lto) {
+        let url = `${api.ai.translate}access_token=${token}&lfrom=${lfrom}&lto=${lto}`;
+        return {
+            method: 'POST',
+            url,
+            body,
         };
     }
 
