@@ -51,6 +51,10 @@ const api = {
     ai: {
         translate: base + 'media/voice/translatecontent?',
     },
+    menu: {
+        create: base + 'menu/create?',
+        del: base + 'menu/delete?',
+    },
 }
 
 module.exports = class Wechat {
@@ -404,6 +408,21 @@ module.exports = class Wechat {
             method: 'POST',
             url,
             body,
+        };
+    }
+    // 新建菜单
+    createMenu(token, menu) {
+        let url = `${api.menu.create}access_token=${token}`;
+        return {
+            method: 'POST',
+            url,
+            body: menu,
+        };
+    }
+    deleteMenu(token) {
+        let url = `${api.menu.del}access_token=${token}`;
+        return {
+            url,
         };
     }
 
