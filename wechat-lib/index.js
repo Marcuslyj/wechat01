@@ -43,6 +43,9 @@ const api = {
         create: base + 'qrcode/create?',
         show: mpBase + 'showqrcode?',
     },
+    shortUrl: {
+        create: base + 'shorturl?',
+    },
 }
 
 module.exports = class Wechat {
@@ -365,6 +368,19 @@ module.exports = class Wechat {
     showQrcode(ticket) {
         let url = `${api.qrcode.show}ticket=${encodeURI(ticket)}`;
         return url;
+    }
+
+    createShortUrl(token, longUrl, action = "long2short") {
+        let body = {
+            action,
+            long_url: longUrl,
+        };
+        let url = `${api.shortUrl.create}access_token=${token}`;
+        return {
+            method: 'POST',
+            url,
+            body,
+        };
     }
 
     // 操作处理函数

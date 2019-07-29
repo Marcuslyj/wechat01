@@ -6,10 +6,6 @@ exports.reply = async (ctx, next) => {
     let wechat = require('../wechat')
     let client = wechat.getWeChat()
 
-    console.log('====================================');
-    console.log(content);
-    console.log('====================================');
-
     if (message.MsgType === 'text') {
         let content = message.Content
         let reply = `Oh，你说的 ${content} 太复杂了，不会解析`
@@ -235,7 +231,11 @@ exports.reply = async (ctx, next) => {
             console.log('====================================');
             console.log(qr);
             console.log('====================================');
-            reply = ticketData.ticket?qr:'16.公众号尚未通过微信认证，无法调用接口～';
+            reply = ticketData.ticket ? qr : '16.公众号尚未通过微信认证，无法调用接口～';
+        } else if ("17" === content) {
+            let longUrl = "http://shang.qq.com/email/stop/email_stop.html?qq=3027677825&sig=083194b1effe19859c6add1d0e4e72e4b634b33db21a3d2c&tttt=1";
+            let shortUrlData = await client.handle('createShortUrl', longUrl);
+            reply = shortUrlData.short_url ? shortUrlData.short_url : '17.公众号尚未通过微信认证，无法调用接口～';
         }
 
         // 获取地理位置
