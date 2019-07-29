@@ -3,6 +3,7 @@ const request = require('request-promise')
 
 const base = 'https://api.weixin.qq.com/cgi-bin/'
 const mpBase = 'https://mp.weixin.qq.com/cgi-bin/'
+const semanticUrl = 'https://api.weixin.qq.com/semantic/semproxy/search?'
 
 const api = {
     accessToken: base + 'token?grant_type=client_credential',
@@ -46,6 +47,7 @@ const api = {
     shortUrl: {
         create: base + 'shorturl?',
     },
+    semanticUrl,
 }
 
 module.exports = class Wechat {
@@ -380,6 +382,16 @@ module.exports = class Wechat {
             method: 'POST',
             url,
             body,
+        };
+    }
+
+    semantic(token, semanticData) {
+        let url = `${api.semanticUrl}access_token=${token}`;
+        semanticData.appid = this.appID;
+        return {
+            method: 'POST',
+            url,
+            body: semanticData,
         };
     }
 
