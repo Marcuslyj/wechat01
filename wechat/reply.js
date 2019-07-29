@@ -200,6 +200,20 @@ exports.reply = async (ctx, next) => {
                 },
             ]);
             reply = `${data.user_info_list ? JSON.stringify(data) : '14.公众号尚未通过微信认证，无法调用接口～'}`;
+        } else if ("15" === content) {
+            let tempQrData = {
+                expire_seconds: 604800,
+                action_name: "QR_SCENE",
+                action_info: {
+                    scene: {
+                        scene_id: 123,
+                        scene_str: "临时二维码"
+                    }
+                }
+            };
+            let tempTicketData = await client.handle('createQrcode', tempQrData);
+            let tempQr = client.showQrcode(tempTicketData.ticket);
+            reply = tempTicketData.ticket ? tempQr : '15.公众号尚未通过微信认证，无法调用接口～';
         }
 
         // 获取地理位置
