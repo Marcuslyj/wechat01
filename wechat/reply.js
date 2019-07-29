@@ -6,6 +6,10 @@ exports.reply = async (ctx, next) => {
     let wechat = require('../wechat')
     let client = wechat.getWeChat()
 
+    console.log('====================================');
+    console.log(content);
+    console.log('====================================');
+
     if (message.MsgType === 'text') {
         let content = message.Content
         let reply = `Oh，你说的 ${content} 太复杂了，不会解析`
@@ -214,6 +218,24 @@ exports.reply = async (ctx, next) => {
             let tempTicketData = await client.handle('createQrcode', tempQrData);
             let tempQr = client.showQrcode(tempTicketData.ticket);
             reply = tempTicketData.ticket ? tempQr : '15.公众号尚未通过微信认证，无法调用接口～';
+        } else if ("16" === content) {
+            let qrData = {
+                action_name: "QR_LIMIT_SCENE",
+                action_info: {
+                    scene: {
+                        scene_id: 321,
+                    }
+                }
+            };
+            let ticketData = await client.handle('createQrcode', qrData);
+            console.log('====================================');
+            console.log(ticketData);
+            console.log('====================================');
+            let qr = client.showQrcode(ticketData.ticket);
+            console.log('====================================');
+            console.log(qr);
+            console.log('====================================');
+            reply = ticketData.ticket?qr:'16.公众号尚未通过微信认证，无法调用接口～';
         }
 
         // 获取地理位置
