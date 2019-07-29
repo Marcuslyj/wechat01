@@ -192,6 +192,14 @@ exports.reply = async (ctx, next) => {
         } else if ("13" === content) {
             let data = await client.handle('getUserInfo', message.FromUserName);
             reply = `${data.openid ? JSON.stringify(data) : '13.尚未通过微信认证，无法调用接口～'}`;
+        } else if ("14" === content) {
+            let data = await client.handle('batchUserInfo', user_list = [
+                {
+                    openid: message.FromUserName,
+                    lang: 'zh_CN',
+                },
+            ]);
+            reply = `${data.user_info_list ? JSON.stringify(data) : '14.公众号尚未通过微信认证，无法调用接口～'}`;
         }
 
         ctx.body = reply

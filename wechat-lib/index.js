@@ -36,6 +36,7 @@ const api = {
         fetch: base + 'user/get?',
         remark: base + 'user/info/updateremark?',
         info: base + 'user/info?',
+        batch: base + 'user/info/batchget?',
     }
 }
 
@@ -332,6 +333,18 @@ module.exports = class Wechat {
         let url = `${api.user.info}access_token=${token}&openid=${openId}&lang=${lang}`;
         return {
             url,
+        };
+    }
+    // 批量获取用户基本信息
+    batchUserInfo(token, user_list) {
+        let body = {
+            user_list,
+        };
+        let url = `${api.user.batch}access_token=${token}`;
+        return {
+            method: 'POST',
+            url,
+            body,
         };
     }
     // 操作处理函数
