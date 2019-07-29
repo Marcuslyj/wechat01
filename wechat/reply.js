@@ -5,10 +5,16 @@ exports.reply = async (ctx, next) => {
 
     let wechat = require('../wechat')
     let client = wechat.getWeChat()
+    console.log('====================================');
+    console.log("message");
+    console.log(message);
+    console.log('====================================');
+
+    let reply = `不会解析`
 
     if (message.MsgType === 'text') {
         let content = message.Content
-        let reply = `Oh，你说的 ${content} 太复杂了，不会解析`
+        reply = `Oh，你说的 ${content} 太复杂了，不会解析`
 
         if (content === '1') {
             reply = '大米'
@@ -16,8 +22,7 @@ exports.reply = async (ctx, next) => {
             reply = '豆腐'
         } else if (content === '3') {
             reply = '咸蛋'
-        }
-        else if (content === '4') {
+        } else if (content === '4') {
             let data = await client.handle('uploadMaterial', 'image', path.resolve(__dirname, '../2.jpg'))
             reply = {
                 type: 'image',
@@ -45,8 +50,7 @@ exports.reply = async (ctx, next) => {
             if (!data.media_id) {
                 reply = "尚未通过微信认证，无法调用接口～";
             }
-        }
-        else if ("7" === content) {
+        } else if ("7" === content) {
             let data = await client.handle('uploadMaterial', 'image', path.resolve(__dirname, '../2.jpg'), {
                 type: 'image',
             });
@@ -295,18 +299,113 @@ exports.reply = async (ctx, next) => {
             } catch (e) {
                 console.log(e);
             }
-        }
-
-        // 获取地理位置
-        if ('event' === message.MsgType) {
-            let reply = '';
-            if ("LOCATION" === message.Event) {
-                reply = `您上报的位置是：${message.Latitude}-${message.Longitude}-${message.Precision}`;
-                context.body = reply;
+        } else if ("21" === content) {
+            try {
+                await client.handle('deleteMenu');
+                let menu = {
+                    button: [
+                        {
+                            name: '发图扫码',
+                            sub_button: [
+                                {
+                                    name: '系统拍照发图',
+                                    type: 'pic_sysphoto',
+                                    key: 'rselfmenu_1_0',
+                                },
+                                {
+                                    name: '拍照或者相册发图',
+                                    type: 'pic_photo_or_album',
+                                    key: 'rselfmenu_1_1',
+                                },
+                                {
+                                    name: '微信相册发图',
+                                    type: 'pic_weixin',
+                                    key: 'rselfmenu_1_2',
+                                },
+                                {
+                                    name: '扫码推',
+                                    type: 'scancode_push',
+                                    key: 'rselfmenu_0_1',
+                                },
+                                {
+                                    name: '扫码带提示',
+                                    type: 'scancode_waitmsg',
+                                    key: 'rselfmenu_0_0',
+                                },
+                            ],
+                        },
+                        {
+                            name: '分类',
+                            type: 'view',
+                            url: 'http://www.feihu1996.cn/',
+                        },
+                        {
+                            name: `其他`,
+                            sub_button: [
+                                {
+                                    name: '点击',
+                                    type: 'click',
+                                    key: "no_110",
+                                },
+                                {
+                                    name: '地理位置',
+                                    type: "location_select",
+                                    key: 'no_111'
+                                },
+                            ],
+                        },
+                    ],
+                };
+                let data = await client.handle('createMenu', menu);
+                reply = !data.errcode ? '自定义菜单创建成功~' : '21.公众号尚未通过微信认证，无法调用接口～';
+            } catch (e) {
+                console.log(e);
             }
         }
-
-        ctx.body = reply
     }
+
+    if ('event' === message.MsgType) {
+        reply = '接收事件推送～';
+        if ("subscribe" === message.Event) {
+            reply = `欢迎订阅～${message.EventKey ? '扫码关注，扫码参数：' + message.EventKey + '，Ticket：,' + message.Ticket : ''}`;
+        }
+        if ("SCAN" === message.Event) {
+            reply = `扫描带参数二维码，二维码scene_id：${message.EventKey}，二维码的ticket：${message.Ticket}`;
+        }
+        if ("unsubscribe" === message.Event) {
+            reply = `无情取消订阅～`;
+        }
+        if ("LOCATION" === message.Event) {
+            reply = `您上报的位置是：${message.Latitude}-${message.Longitude}-${message.Precision}`;
+        }
+        if ("CLICK" === message.Event) {
+            reply = `你点击了菜单的${message.EventKey}`;
+        }
+        if ("VIEW" === message.Event) {
+            reply = `你点击了菜单链接： ${message.EventKey} ${message.MenuId}`;
+        }
+        if ("scancode_push" === message.Event || "scancode_waitmsg" === message.Event) {
+            reply = `你扫码了：${message.ScanCodeInfo.ScanType} ${message.ScanCodeInfo.ScanResult}`;
+        }
+        if ("pic_sysphoto" === message.Event) {
+            reply = `系统拍照发图：${message.SendPicsInfo.Count} ${JSON.stringify(message.SendPicsInfo.PicList)}`;
+        }
+        if ("pic_photo_or_album" === message.Event) {
+            reply = `拍照或者相册发图：${message.SendPicsInfo.Count} ${JSON.stringify(message.SendPicsInfo.PicList)}`;
+        }
+        if ("pic_weixin" === message.Event) {
+            reply = `微信相册发图：${message.SendPicsInfo.Count} ${JSON.stringify(message.SendPicsInfo.PicList)}`;
+        }
+        if ("location_select" === message.Event) {
+            reply = `地理位置：${JSON.stringify(message.SendLocationInfo)}`;
+        }
+    }
+
+    if ('image' === message.MsgType) {
+        reply = `接收图片消息：${message.PicUrl ? message.PicUrl : ''}`;
+    }
+
+    ctx.body = reply
+
     await next()
 }
