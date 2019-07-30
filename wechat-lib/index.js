@@ -54,7 +54,10 @@ const api = {
     menu: {
         create: base + 'menu/create?',
         del: base + 'menu/delete?',
+        custom: base + 'menu/addconditional?',
+        fetch: base + 'menu/get?',
     },
+
 }
 
 module.exports = class Wechat {
@@ -411,8 +414,12 @@ module.exports = class Wechat {
         };
     }
     // 新建菜单
-    createMenu(token, menu) {
-        let url = `${api.menu.create}access_token=${token}`;
+    createMenu(token, menu, rules) {
+        let url = `${api.menu.create}access_token=${token}`
+        if (rules) {
+            url = `${api.menu.custom}access_token=${token}`
+            menu.matchrule = rules
+        }
         return {
             method: 'POST',
             url,
@@ -421,6 +428,13 @@ module.exports = class Wechat {
     }
     deleteMenu(token) {
         let url = `${api.menu.del}access_token=${token}`;
+        return {
+            url,
+        };
+    }
+
+    fetchMenu(token) {
+        let url = `${api.menu.fetch}access_token=${token}`
         return {
             url,
         };
