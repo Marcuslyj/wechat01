@@ -23,4 +23,4 @@ const wechatCfg = {
 
 exports.getWeChat = () => new Wechat(wechatCfg.wechat)
 
-exports.getOAuth = ()=> new WechatOAuth(wechatCfg.wechat)
+exports.getOAuth = () => new WechatOAuth(wechatCfg.wechat)

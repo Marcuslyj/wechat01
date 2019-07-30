@@ -10,8 +10,8 @@ const base = 'https://api.weixin.qq.com/sns'
 
 const api = {
     authorize: "https://open.weixin.qq.com/connect/oauth2/authorize?",
-    accessToken: "/oauth2/access_token?",
-    userinfo: "/userinfo?"
+    accessToken: base + "/oauth2/access_token?",
+    userinfo: base + "/userinfo?"
 }
 
 module.exports = class WechatOAuth {
@@ -37,7 +37,7 @@ module.exports = class WechatOAuth {
     }
     // 详细信息/主动授权：snsapi_userinfo
     // 基本信息/静默授权：snsapi_base
-    getAuthorizeurl(scope = 'snsapi_base', target, state) {
+    getAuthorizeUrl(scope = 'snsapi_base', target, state) {
         let url = `${api.authorize}appid=${this.appID}&redirect_uri=${encodeURIComponent(target)}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
         return url;
     }

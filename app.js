@@ -2,6 +2,7 @@ const Koa = require('koa')
 const wechat = require('./wechat-lib/middleware.js')
 const config = require('./config/config.js')
 const { initSchemas, connect } = require('./app/database/init.js')
+const Router = require('koa-router')
 
 
     ; (async () => {
@@ -11,8 +12,12 @@ const { initSchemas, connect } = require('./app/database/init.js')
         initSchemas()
 
         const app = new Koa()
-        // 你问我答中间件
-        app.use(wechat(config.wechat))
+        const router = new Router()
+
+
+        // 接入微信消息中间件
+        require('./config/routes.js')(router)
+        app.use(router.routes()).use(router.allowedMethods())
 
         app.listen(config.port)
         console.log(`listen: ${config.port}`);
