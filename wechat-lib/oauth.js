@@ -53,7 +53,7 @@ module.exports = class WechatOAuth {
 
     // 获取用户信息
     async getUserInfo(token, openId, lang = "zh_CN") {
-        const url = `${api.userInfo}access_token=${token}&openid=${openId}&lang=${lang}`;
+        const url = `${api.userinfo}access_token=${token}&openid=${openId}&lang=${lang}`;
         const res = await this.request({
             url
         });

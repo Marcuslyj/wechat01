@@ -6,5 +6,5 @@ module.exports = {
         appSecret: '63a70c8bcd027b3d3f05314715b0e228',
         token: 'fsdfdv1f65d1b651gbg651'
     },
-    baseUrl: 'http://b2578068a6.wicp.vip/'
+    baseUrl: 'http://b2578068a6.wicp.vip'
 }

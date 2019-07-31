@@ -20,17 +20,14 @@ exports.oauth = async (ctx, next) => {
     let oauth = getOAuth()
     let url = oauth.getAuthorizeUrl(scope, target, state);
 
-    console.log('====================================');
-    console.log(url);
-    console.log('====================================');
-
     ctx.redirect(url);
 }
 
 exports.userinfo = async (ctx, next) => {
-    let oauth = getOAuth()
+    let oauth = getOAuth()    
 
     const code = ctx.query.code;
+
     const tokenData = await oauth.fetchAccessToken(code);
     const userData = await oauth.getUserInfo(tokenData.access_token, tokenData.openid);
 

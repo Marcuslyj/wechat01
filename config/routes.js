@@ -2,6 +2,7 @@
 const Wechat = require('../app/controllers/wechat')
 
 module.exports = router => {
+    // 进入消息中间件
     router.get(
         // config.URL_PREFIX + 
         '/wx-hear', Wechat.hear);
@@ -16,5 +17,5 @@ module.exports = router => {
     // 通过code获取用户信息
     router.get(
         // config.URL_PREFIX + 
-        '/userInfo', Wechat.userinfo);
+        '/userinfo', Wechat.userinfo);
 }
