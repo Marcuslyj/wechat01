@@ -57,7 +57,9 @@ const api = {
         custom: base + 'menu/addconditional?',
         fetch: base + 'menu/get?',
     },
-
+    ticket: {
+        get: base + 'ticket/getticket?',
+    },
 }
 
 module.exports = class Wechat {
@@ -67,6 +69,8 @@ module.exports = class Wechat {
         this.appSecret = opts.appSecret
         this.getAccessToken = opts.getAccessToken
         this.saveAccessToken = opts.saveAccessToken
+        this.getTicket = opts.getTicket
+        this.saveTicket = opts.saveTicket
 
         this.fetchAccessToken()
     }
@@ -85,18 +89,39 @@ module.exports = class Wechat {
             console.log(error)
         }
     }
+    // 获取ticket
+    async fetchTicket(token) {
+        let data = await this.getTicket()
+        if (!this.isValid(data)) {
+            data = await this.updateTicket(token)
+        }
+        return data
+    }
+    // 更新ticket
+    async updateTicket(token) {
+        const url = `${api.ticket.get}access_token=${token}&type=jsapi`;
+        const data = await this.request({ url });
+
+        const now = new Date().getTime();
+        const expiresIn = now + (data.expires_in - 20) * 1000;
+
+        data.expires_in = expiresIn;
+
+        await this.saveTicket(data);
+
+        return data;
+    }
     // 获取token
     async fetchAccessToken() {
         // 获取数据库token,
         let data = await this.getAccessToken()
         // 检查数据库token是否过期
-        if (!this.isValidToken(data)) {
+        if (!this.isValid(data)) {
             // 过期重新获取
             data = await this.updateAccessToken()
             // 本地保存token
             await this.saveAccessToken(data)
         }
-
 
         return data
     }
@@ -113,7 +138,7 @@ module.exports = class Wechat {
         return data
     }
     // 检查token是否过期
-    isValidToken(data) {
+    isValid(data) {
         if (!data || !data.expires_in) {
             return false
         }

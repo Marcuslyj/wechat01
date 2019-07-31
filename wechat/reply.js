@@ -5,10 +5,6 @@ exports.reply = async (ctx, next) => {
 
     let wechat = require('../wechat')
     let client = wechat.getWeChat()
-    console.log('====================================');
-    console.log("message");
-    console.log(message);
-    console.log('====================================');
 
     let reply = `不会解析`
 

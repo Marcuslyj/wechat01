@@ -1,15 +1,15 @@
 const reply = require('../../wechat/reply');
 const config = require('../../config/config.js');
 const wechatMiddle = require('../../wechat-lib/middleware');
-const { getOAuth } = require('../../wechat/index.js')
-
+const api = require('../api')
 
 exports.sdk = async (ctx, next) => {
-    ctx.body = "sdk page"
+    const url = ctx.href
+    const params = await api.wechat.getSignature(url)
     await ctx.render('wechat/sdk', {
+        ...params,
         layout: 'layout',
-        title: "sdk page",
-        desc: '测试 sdk'
+        title: 'sdk'
     })
 }
 
@@ -25,19 +25,14 @@ exports.oauth = async (ctx, next) => {
     let scope = 'snsapi_userinfo'
     let state = ctx.query.id
 
-    let oauth = getOAuth()
-    let url = oauth.getAuthorizeUrl(scope, target, state);
+    let url = api.wechat.getAuthorizeUrl(scope, target, state);
 
     ctx.redirect(url);
 }
 
 exports.userinfo = async (ctx, next) => {
-    let oauth = getOAuth()
-
     const code = ctx.query.code;
-
-    const tokenData = await oauth.fetchAccessToken(code);
-    const userData = await oauth.getUserInfo(tokenData.access_token, tokenData.openid);
+    const userData = await api.wechat.getUserInfo(code)
 
     ctx.body = userData;
 }
