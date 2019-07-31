@@ -4,6 +4,14 @@ const wechatMiddle = require('../../wechat-lib/middleware');
 const { getOAuth } = require('../../wechat/index.js')
 
 
+exports.sdk = async (ctx, next) => {
+    ctx.body = "sdk page"
+    await ctx.render('wechat/sdk', {
+        layout: 'layout',
+        title: "sdk page",
+        desc: '测试 sdk'
+    })
+}
 
 
 // 接入微信消息中间件
@@ -24,7 +32,7 @@ exports.oauth = async (ctx, next) => {
 }
 
 exports.userinfo = async (ctx, next) => {
-    let oauth = getOAuth()    
+    let oauth = getOAuth()
 
     const code = ctx.query.code;
 

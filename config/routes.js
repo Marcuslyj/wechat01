@@ -18,4 +18,8 @@ module.exports = router => {
     router.get(
         // config.URL_PREFIX + 
         '/userinfo', Wechat.userinfo);
+
+    router.get(
+        // config.URL_PREFIX + 
+        '/sdk', Wechat.sdk);
 }
