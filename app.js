@@ -55,6 +55,7 @@ const mongoose = require('mongoose')
                 }
             } else {
                 ctx.session.user = null
+                // 不用清state？
             }
             await next()
         })
