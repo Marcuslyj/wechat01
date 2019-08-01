@@ -10,17 +10,16 @@
                 <tr>更新时间</tr>
             </thead>
             <tbody>
-                <% 
-                    if(users && users.length){
-                        users.map(user=>{ 
-                %>
+                <% if(users && users.length){ %>
+                <%    users.map(user=>{ %>
                 <tr class="<% 'item-id-' + user._id %>">
                     <td><%= user.nickname %></td>
                     <td><%= user.email %></td>
                     <td><%= user.role %></td>
                     <td><%= moment(user.updatedAt).format('YYYY-MM-DD') %></td>
                 </tr>
-                <%})} %>
+                <% }) %>
+                <% } %>
             </tbody>
         </table>
     </div>
