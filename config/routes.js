@@ -13,6 +13,9 @@ module.exports = router => {
     router.post('/user/signin', User.signin)
     router.get('/logout', User.logout)
 
+    // 后台的用户列表页
+    router.get('/admin/user/list', User.userlist)
+
 
     // 进入消息中间件
     router.get('/wx-hear', Wechat.hear)

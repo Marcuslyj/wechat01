@@ -25,8 +25,16 @@ const mongoose = require('mongoose')
             layout: false,
             viewExt: 'html',
             cache: false,
-            debug: true,
-            moment
+            debug: true
+        })
+
+        // ejs公共数据
+        app.use(async (ctx, next) => {
+            ctx.state = {
+                ...ctx.state,
+                moment
+            }
+            await next()
         })
 
         app.keys = ['wechat']

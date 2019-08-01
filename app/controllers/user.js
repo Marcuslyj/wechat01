@@ -25,7 +25,7 @@ exports.signup = async (ctx, next) => {
 
     let user = await User.findOne({ email })
 
-    if (user) {        
+    if (user) {
         return ctx.redirect('/user/signin');
     }
 
@@ -80,3 +80,14 @@ exports.logout = async (ctx, next) => {
 // 5.增加路由规则
 // 6.增加两个ejs页面，注册、登录
 // 7.koa-bodyparser
+
+
+exports.userlist = async (ctx, next) => {
+    const users = await User.find({}).sort('meta.updatedAt')
+
+    await ctx.render('pages/user/userlist', {
+        title: '用户列表页面',
+        layout: 'layout',
+        users
+    })
+}
