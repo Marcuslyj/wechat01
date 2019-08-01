@@ -1,25 +1,30 @@
-// const config = require('../config');
 const Wechat = require('../app/controllers/wechat')
+const User = require('../app/controllers/user.js')
+const Index = require('../app/controllers/index.js')
 
 module.exports = router => {
+    // 首页
+    router.get('/', Index.homePage)
+
+    // 用户注册登录
+    router.get('/user/signup', User.showSignup)
+    router.get('/user/signin', User.showSignin)
+    router.post('/user/signup', User.signup)
+    router.post('/user/signin', User.signin)
+    router.get('/logout', User.logout)
+
+
     // 进入消息中间件
-    router.get(
-        // config.URL_PREFIX + 
-        '/wx-hear', Wechat.hear);
-    router.post(
-        // config.URL_PREFIX + 
-        '/wx-hear', Wechat.hear);
+    router.get('/wx-hear', Wechat.hear)
+    router.post('/wx-hear', Wechat.hear)
 
     // 跳到授权中间服务页面
-    router.get(
-        // config.URL_PREFIX + 
-        '/wx-oauth', Wechat.oauth);
+    router.get('/wx-oauth', Wechat.oauth)
     // 通过code获取用户信息
-    router.get(
-        // config.URL_PREFIX + 
-        '/userinfo', Wechat.userinfo);
+    router.get('/userinfo', Wechat.userinfo)
 
-    router.get(
-        // config.URL_PREFIX + 
-        '/sdk', Wechat.sdk);
+    // 微信sdk调用页
+    router.get('/sdk', Wechat.sdk)
+
+
 }

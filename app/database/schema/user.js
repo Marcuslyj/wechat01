@@ -15,11 +15,15 @@ const UserSchema = new Schema({
     unionid: String,
     nickname: String,
     address: String,
-    province: String,
     country: String,
+    province: String,
     city: String,
     gender: String,
-    email: String,
+    // 邮箱唯一
+    email: {
+        unique: true,
+        type: String
+    },
     password: String,
     loginAttempts: {
         type: Number,
@@ -53,21 +57,21 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
-UserSchema.pre('save', (next) => {
-    let user = this;
+UserSchema.pre('save', function (next) {
     // 密码没有更改
-    if (!user.isModified('password')) {
+    if (!this.isModified('password')) {
         return next();
     }
+    // 加盐
     bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
         if (err) {
             return next(err);
         }
-        bcrypt.hash(user.password, salt, (err, hash) => {
+        bcrypt.hash(this.password, salt, (err, hash) => {
             if (err) {
                 return next(err);
             }
-            user.password = hash;
+            this.password = hash;
             next();
         });
     });
@@ -87,10 +91,13 @@ UserSchema.methods = {
         });
     },
     incLoginAttempts(user) {
-        let that = user;
+        console.log('====================================');
+        console.log(this);
+        console.log(user);
+        console.log('====================================');
         return new Promise((resolve, reject) => {
-            if (that.lockUntil && that.lockUntil < Date.now()) {
-                that.update({
+            if (user.lockUntil && user.lockUntil < Date.now()) {
+                user.update({
                     $set: {
                         loginAttempts: 1,
                     },
@@ -110,12 +117,12 @@ UserSchema.methods = {
                         loginAttempts: 1,
                     },
                 };
-                if (that.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS || !that.isLocked) {
+                if (user.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS || !user.isLocked) {
                     updates.$set = {
                         lockUntil: Date.now() + LOCK_TIME,
                     };
                 }
-                that.update(updates, err => {
+                user.update(updates, err => {
                     if (!err) {
                         resolve(true);
                     } else {
@@ -127,4 +134,5 @@ UserSchema.methods = {
     }
 };
 
-mongoose.model('User', TokenSchema);
+// 创建Model
+const User = mongoose.model('User', UserSchema)
