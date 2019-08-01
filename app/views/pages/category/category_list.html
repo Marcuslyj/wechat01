@@ -1,0 +1,26 @@
+<% var users; %>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>修改</th>
+                    <th>更新时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(categories && categories.length){ %>
+                <%    categories.map(item=>{ %>
+                <tr class="<% 'item-id-' + item._id %>">
+                    <td><%= item.name %></td>
+                    <td><a target="_blank" href="<%= '/admin/category/'+ item._id %>">修改</a></td>
+                    <td><%= moment(item.updatedAt).format('YYYY-MM-DD') %></td>
+                </tr>
+                <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

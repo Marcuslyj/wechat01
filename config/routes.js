@@ -1,6 +1,7 @@
 const Wechat = require('../app/controllers/wechat')
 const User = require('../app/controllers/user.js')
 const Index = require('../app/controllers/index.js')
+const Category = require('../app/controllers/category.js')
 
 module.exports = router => {
     // 首页
@@ -16,6 +17,12 @@ module.exports = router => {
     // 后台的用户列表页
     // 权限控制
     router.get('/admin/user/list', User.signinRequired, User.adminRequired, User.userlist)
+    // 后台分类管理页面
+    router.get('/admin/category', User.signinRequired, User.adminRequired, Category.show)
+    router.get('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.show)
+    router.post('/admin/category', User.signinRequired, User.adminRequired, Category.new)
+    router.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
+    router.post('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.new)
 
 
     // 进入消息中间件
