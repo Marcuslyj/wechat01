@@ -1,27 +1,17 @@
 <% var user; %>
-<div class="container">
-    <div class="row">
-        <div class="page-header clearfix">
-            <h1><%= title %></h1>
-            <div class="col-md-4">
-                <small>时光的余热</small>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
-        <div class="navbar-header">
+        <div class="navbar-header" style="width:100%;">
             <a href="/" class="navbar-brand">时光的余热</a>
             <% if(user && user.nickname){ %>
-            <p class="navbar-text navbar-right">
+            <p class="navbar-text navbar-right float-right">
                 <span>欢迎您，<%= user.nickname %></span>
                 <span>&nbsp;|&nbsp;</span>
                 <a href="/logout" class="navbar-link">登出</a>
             </p>
             <% }else{ %>
-            <p class="navbar-text navbar-right">
+            <p class="navbar-text navbar-right float-right">
                 <a href="#" data-toggle="modal" data-target="#signupModal" class="navbar-link">注册</a>
                 <span>&nbsp;|&nbsp;</span>
                 <a href="#" class="navbar-link" data-toggle="modal" data-target="#signinModal">登录</a>

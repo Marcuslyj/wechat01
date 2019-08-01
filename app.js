@@ -52,12 +52,14 @@ const mongoose = require('mongoose')
 
                 ctx.session.user = {
                     _id: user._id,
+                    role: user.role,
                     nickname: user.nickname
                 }
                 ctx.state = {
                     ...ctx.state,
                     user: {
                         _id: user._id,
+                        role: user.role,
                         nickname: user.nickname
                     }
                 }

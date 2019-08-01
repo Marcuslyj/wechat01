@@ -14,7 +14,8 @@ module.exports = router => {
     router.get('/logout', User.logout)
 
     // 后台的用户列表页
-    router.get('/admin/user/list', User.userlist)
+    // 权限控制
+    router.get('/admin/user/list', User.signinRequired, User.adminRequired, User.userlist)
 
 
     // 进入消息中间件
