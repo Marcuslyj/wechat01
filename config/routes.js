@@ -19,9 +19,9 @@ module.exports = router => {
     router.get('/admin/user/list', User.signinRequired, User.adminRequired, User.userlist)
     // 后台分类管理页面
     router.get('/admin/category', User.signinRequired, User.adminRequired, Category.show)
-    router.get('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.show)
     router.post('/admin/category', User.signinRequired, User.adminRequired, Category.new)
     router.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
+    router.get('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.show)
     router.post('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.new)
 
 

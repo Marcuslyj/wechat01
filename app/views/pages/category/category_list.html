@@ -15,7 +15,7 @@
                 <%    categories.map(item=>{ %>
                 <tr class="<% 'item-id-' + item._id %>">
                     <td><%= item.name %></td>
-                    <td><a target="_blank" href="<%= '/admin/category/'+ item._id %>">修改</a></td>
+                    <td><a target="_blank" href="<%= '/admin/category/update/'+ item._id %>">修改</a></td>
                     <td><%= moment(item.updatedAt).format('YYYY-MM-DD') %></td>
                 </tr>
                 <% }) %>

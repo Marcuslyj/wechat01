@@ -33,7 +33,7 @@ exports.new = async (ctx, next) => {
     }
 
     await category.save()
-    ctx.redirect('/admin/category/category_list')
+    ctx.redirect('/admin/category/list')
 }
 
 // 3.电影分类的后台列表
