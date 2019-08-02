@@ -1,0 +1,60 @@
+<% var users; %>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>类别</th>
+                    <th>名字</th>
+                    <th>导演</th>
+                    <th>国家</th>
+                    <th>上映</th>
+                    <th>修改</th>
+                    <th>删除</th>
+                    <th>录入时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(movies && movies.length){ %>
+                <%    movies.map(item=>{ %>
+                <tr class="<% 'item-id-' + item._id %>">
+                    <td><%= item.category ? item.category.name : '' %></td>
+                    <td><%= item.title %></td>
+                    <td><%= item.director %></td>
+                    <td><%= item.country %></td>
+                    <td><%= item.year %></td>
+                    <td><%= item.name %></td>
+                    <td><a target="_blank" href="<%= '/admin/movie/update/'+ item._id %>">修改</a></td>
+                    <td>
+                        <button type="button" class="btn btn-danger del" data-id="<%= item._id %>">删除</button>
+                    </td>
+                    <td><%= moment(item.createdAt).format('YYYY-MM-DD') %></td>
+                </tr>
+                <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.del').click(function (e) {
+            var target = $(e.target);
+            var id = target.data('id');
+            var tr = $('.item-id-' + id);
+            $.ajax({
+                type: 'DELETE',
+                url: '/admin/movie?id=' + id,
+            })
+                .done(function (results) {
+                    if (results.success) {
+                        if (tr.length >= 1) {
+                            tr.remove();
+                        }
+                    }
+                });
+        });
+    });
+</script>

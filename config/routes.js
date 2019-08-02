@@ -2,6 +2,7 @@ const Wechat = require('../app/controllers/wechat')
 const User = require('../app/controllers/user.js')
 const Index = require('../app/controllers/index.js')
 const Category = require('../app/controllers/category.js')
+const Movie = require('../app/controllers/movie.js')
 
 module.exports = router => {
     // 首页
@@ -23,6 +24,13 @@ module.exports = router => {
     router.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
     router.get('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.show)
     router.post('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.new)
+    // 后台电影管理页面
+    router.get('/admin/movie', User.signinRequired, User.adminRequired, Movie.show)
+    router.post('/admin/movie', User.signinRequired, User.adminRequired, Movie.new)
+    router.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list)
+    router.get('/admin/movie/update/:_id', User.signinRequired, User.adminRequired, Movie.show)
+    router.post('/admin/movie/update/:_id', User.signinRequired, User.adminRequired, Movie.new)
+    router.delete('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.del)
 
 
     // 进入消息中间件
