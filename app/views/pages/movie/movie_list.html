@@ -18,13 +18,12 @@
             <tbody>
                 <% if(movies && movies.length){ %>
                 <%    movies.map(item=>{ %>
-                <tr class="<% 'item-id-' + item._id %>">
+                <tr class="<%= 'item-id-' + item._id %>">
                     <td><%= item.category ? item.category.name : '' %></td>
                     <td><%= item.title %></td>
                     <td><%= item.director %></td>
                     <td><%= item.country %></td>
                     <td><%= item.year %></td>
-                    <td><%= item.name %></td>
                     <td><a target="_blank" href="<%= '/admin/movie/update/'+ item._id %>">修改</a></td>
                     <td>
                         <button type="button" class="btn btn-danger del" data-id="<%= item._id %>">删除</button>
@@ -46,7 +45,7 @@
             var tr = $('.item-id-' + id);
             $.ajax({
                 type: 'DELETE',
-                url: '/admin/movie?id=' + id,
+                url: '/admin/movie/update?id=' + id,
             })
                 .done(function (results) {
                     if (results.success) {

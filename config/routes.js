@@ -30,7 +30,7 @@ module.exports = router => {
     router.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list)
     router.get('/admin/movie/update/:_id', User.signinRequired, User.adminRequired, Movie.show)
     router.post('/admin/movie/update/:_id', User.signinRequired, User.adminRequired, Movie.new)
-    router.delete('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.del)
+    router.delete('/admin/movie/update', User.signinRequired, User.adminRequired, Movie.del)
 
 
     // 进入消息中间件

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Movie = mongoose.model('Movie')
 const Category = mongoose.model('Category')
+const _ = require('lodash')
 
 // 0.电影Model创建
 // 1.电影的录入页面
@@ -44,12 +45,13 @@ exports.new = async (ctx, next) => {
         movie = await Movie.findOne({ _id: movieData._id })
     }
     if (movie) {
-        movie = {
-            ...movie,
-            ...movieData,
-            category: category._id
-        }
-
+        movie = _.extend(movie, movieData)
+        movie.category = category._id
+        // movie = {
+        //     ...movie,
+        //     ...movieData,
+        //     category: category._id
+        // }
     } else {
         delete movieData._id
         movieData.category = category._id
@@ -62,6 +64,8 @@ exports.new = async (ctx, next) => {
     if (category) {
         category.movies = category.movies || []
         category.movies.push(movie._id)
+        // 去重
+        category.movies = Array.from(new Set(category.movies))
 
         await category.save()
     }
@@ -87,6 +91,7 @@ exports.list = async (ctx, next) => {
 // 删除电影数据
 exports.del = async (ctx, next) => {
     let _id = ctx.query.id;
+
     try {
         await Movie.deleteOne({ _id });
         ctx.body = {
