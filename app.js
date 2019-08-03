@@ -8,6 +8,7 @@ const ejs = require('koa-ejs')
 const bodyparser = require('koa-bodyparser')
 const session = require('koa-session')
 const mongoose = require('mongoose')
+const static = require('koa-static')
 
 
     ; (async () => {
@@ -40,6 +41,8 @@ const mongoose = require('mongoose')
         app.keys = ['wechat']
         app.use(session(app))
         app.use(bodyparser())
+        //静态资源
+        app.use(static(path.resolve(__dirname,'./static')))
 
 
         // 登录信息中间件，   怎么运行的？？？？

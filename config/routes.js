@@ -3,6 +3,7 @@ const User = require('../app/controllers/user.js')
 const Index = require('../app/controllers/index.js')
 const Category = require('../app/controllers/category.js')
 const Movie = require('../app/controllers/movie.js')
+const koaBody = require('koa-body')
 
 module.exports = router => {
     // 首页
@@ -30,7 +31,7 @@ module.exports = router => {
 
     // 后台电影管理页面
     router.get('/admin/movie', User.signinRequired, User.adminRequired, Movie.show)
-    router.post('/admin/movie', User.signinRequired, User.adminRequired, Movie.new)
+    router.post('/admin/movie', User.signinRequired, User.adminRequired, koaBody({ multipart: true }), Movie.savePoster, Movie.new)
     router.get('/admin/movie/list', User.signinRequired, User.adminRequired, Movie.list)
     router.get('/admin/movie/update/:_id', User.signinRequired, User.adminRequired, Movie.show)
     router.post('/admin/movie/update/:_id', User.signinRequired, User.adminRequired, Movie.new)

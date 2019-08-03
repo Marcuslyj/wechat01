@@ -2,6 +2,34 @@ const mongoose = require('mongoose')
 const Movie = mongoose.model('Movie')
 const Category = mongoose.model('Category')
 const _ = require('lodash')
+const fs = require('fs')
+const path = require('path')
+const util = require('util')
+
+const readFileAsync = util.promisify(fs.readFile)
+const writeFileAsync = util.promisify(fs.writeFile)
+
+exports.savePoster = async (ctx, next) => {
+    const posterData = ctx.request.body.files.uploadPoster
+    const { path: filePath, name: fileName } = posterData
+
+    if (fileName) {
+        const data = await readFileAsync(filePath)
+        const timestamp = Date.now()
+        console.log('====================================');
+        console.log(posterData.type);
+        console.log('====================================');
+        const type = posterData.type.split('/')[1]
+        const poster = timestamp + '.' + type
+        const newPath = path.resolve(__dirname, '../../', 'public/upload', poster)
+        console.log('====================================');
+        console.log(newPath);
+        console.log('====================================');
+        await writeFileAsync(newPath, data)
+        ctx.poster = poster
+    }
+    await next()
+}
 
 // 0.电影Model创建
 // 1.电影的录入页面
@@ -24,12 +52,17 @@ exports.show = async (ctx, next) => {
 }
 // 2.电影的创建持久化
 exports.new = async (ctx, next) => {
-    let movieData = ctx.request.body || {}
+    let movieData = ctx.request.body.fields || {}
     let movie
 
     const categoryId = movieData.categoryId
     const categoryName = movieData.categoryName
     let category
+
+    //自己上传的图片路径
+    if (ctx.poster) {
+        movieData.poster = ctx.poster
+    }
 
     // 查出相应分类
     if (categoryId) {
