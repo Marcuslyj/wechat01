@@ -137,3 +137,14 @@ exports.del = async (ctx, next) => {
         };
     }
 }
+
+// 详情页
+exports.detail = async (ctx, next) => {
+    let _id = ctx.params._id;
+    let movie = await Movie.findOne({ _id });
+    // await Movie.update({ _id }, { $inc: { pv: 1 } });
+    await ctx.render("pages/movie/movie_detail", {
+        title: '电影详情页面',
+        movie
+    });
+}

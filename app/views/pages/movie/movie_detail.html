@@ -1,0 +1,27 @@
+<div class="container">
+    <% if(movie && movie.title){%>
+    <div class="row">
+        <div class="col-md-7">
+            <% if(movie.poster.indexOf('http')>-1){ %>
+            <img src="<%= movie.poster %>" alt="<%= movie.title %>">
+            <% }else{ %>
+            <img src="<%= '/upload/' + movie.poster %>" alt="<%= movie.title %>">
+            <% } %>
+        </div>
+        <div class="col-md-5">
+            <div class="dl-horizontal">
+                <dt>电影名字</dt>
+                <dt><%= movie.title %></dt>
+                <dt>导演</dt>
+                <dt><%= movie.director %></dt>
+                <dt>国家</dt>
+                <dt><%= movie.country %></dt>
+                <dt>上映年份</dt>
+                <dt><%= movie.year %></dt>
+                <dt>简介</dt>
+                <dt><%= movie.summary %></dt>
+            </div>
+        </div>
+    </div>
+    <%}%>
+</div>
