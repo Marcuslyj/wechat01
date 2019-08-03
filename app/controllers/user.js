@@ -115,3 +115,21 @@ exports.adminRequired = async (ctx, next) => {
 
     await next()
 }
+
+
+// 删除用户数据
+exports.del = async (ctx, next) => {
+    let _id = ctx.query.id;
+
+    try {
+        await User.deleteOne({ _id });
+        ctx.body = {
+            success: true,
+        };
+    } catch (error) {
+        console.log(error);
+        ctx.body = {
+            success: false,
+        };
+    }
+}

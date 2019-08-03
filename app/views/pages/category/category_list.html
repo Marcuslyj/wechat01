@@ -7,15 +7,19 @@
                 <tr>
                     <th>名称</th>
                     <th>修改</th>
+                    <th>删除</th>
                     <th>更新时间</th>
                 </tr>
             </thead>
             <tbody>
                 <% if(categories && categories.length){ %>
                 <%    categories.map(item=>{ %>
-                <tr class="<% 'item-id-' + item._id %>">
+                <tr class="<%= 'item-id-' + item._id %>">
                     <td><%= item.name %></td>
                     <td><a target="_blank" href="<%= '/admin/category/update/'+ item._id %>">修改</a></td>
+                    <td>
+                        <button type="button" class="btn btn-danger del" data-id="<%= item._id %>">删除</button>
+                    </td>
                     <td><%= moment(item.updatedAt).format('YYYY-MM-DD') %></td>
                 </tr>
                 <% }) %>
@@ -24,3 +28,24 @@
         </table>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('.del').click(function (e) {
+            var target = $(e.target);
+            var id = target.data('id');
+            var tr = $('.item-id-' + id);
+            $.ajax({
+                type: 'DELETE',
+                url: '/admin/category/update?id=' + id,
+            })
+                .done(function (results) {
+                    if (results.success) {
+                        if (tr.length >= 1) {
+                            tr.remove();
+                        }
+                    }
+                });
+        });
+    });
+</script>

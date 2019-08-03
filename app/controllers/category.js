@@ -48,3 +48,20 @@ exports.list = async (ctx, next) => {
 }
 // 4.对应的分类路由规则
 // 5.对应的分类页面
+
+// 删除分类数据
+exports.del = async (ctx, next) => {
+    let _id = ctx.query.id;
+
+    try {
+        await Category.deleteOne({ _id });
+        ctx.body = {
+            success: true,
+        };
+    } catch (error) {
+        console.log(error);
+        ctx.body = {
+            success: false,
+        };
+    }
+}

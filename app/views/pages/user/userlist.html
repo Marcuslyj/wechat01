@@ -8,17 +8,21 @@
                     <th>昵称</th>
                     <th>邮箱</th>
                     <th>角色</th>
+                    <th>删除</th>
                     <th>更新时间</th>
                 </tr>
             </thead>
             <tbody>
                 <% if(users && users.length){ %>
-                <%    users.map(user=>{ %>
-                <tr class="<% 'item-id-' + user._id %>">
-                    <td><%= user.nickname %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.role %></td>
-                    <td><%= moment(user.updatedAt).format('YYYY-MM-DD') %></td>
+                <%    users.map(item=>{ %>
+                <tr class="<%= 'item-id-' + item._id %>">
+                    <td><%= item.nickname %></td>
+                    <td><%= item.email %></td>
+                    <td><%= item.role %></td>
+                    <td>
+                        <button type="button" class="btn btn-danger del" data-id="<%= item._id %>">删除</button>
+                    </td>
+                    <td><%= moment(item.updatedAt).format('YYYY-MM-DD') %></td>
                 </tr>
                 <% }) %>
                 <% } %>
@@ -26,3 +30,24 @@
         </table>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('.del').click(function (e) {
+            var target = $(e.target);
+            var id = target.data('id');
+            var tr = $('.item-id-' + id);
+            $.ajax({
+                type: 'DELETE',
+                url: '/admin/user/update?id=' + id,
+            })
+                .done(function (results) {
+                    if (results.success) {
+                        if (tr.length >= 1) {
+                            tr.remove();
+                        }
+                    }
+                });
+        });
+    });
+</script>

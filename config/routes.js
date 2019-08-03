@@ -18,12 +18,16 @@ module.exports = router => {
     // 后台的用户列表页
     // 权限控制
     router.get('/admin/user/list', User.signinRequired, User.adminRequired, User.userlist)
+    router.delete('/admin/user/update', User.signinRequired, User.adminRequired, User.del)
+
     // 后台分类管理页面
     router.get('/admin/category', User.signinRequired, User.adminRequired, Category.show)
     router.post('/admin/category', User.signinRequired, User.adminRequired, Category.new)
     router.get('/admin/category/list', User.signinRequired, User.adminRequired, Category.list)
     router.get('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.show)
     router.post('/admin/category/update/:_id', User.signinRequired, User.adminRequired, Category.new)
+    router.delete('/admin/category/update', User.signinRequired, User.adminRequired, Category.del)
+
     // 后台电影管理页面
     router.get('/admin/movie', User.signinRequired, User.adminRequired, Movie.show)
     router.post('/admin/movie', User.signinRequired, User.adminRequired, Movie.new)
