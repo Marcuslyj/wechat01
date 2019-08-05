@@ -1,0 +1,76 @@
+<% var categories; %>
+<% var keyword; %>
+<% var movies; %>
+<% var totalPage; %>
+<% var query; %>
+
+
+<div class="container">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-deading">
+                <h3><%= keyword %></h3>
+            </div>
+        </div>
+        <% if(movies && movies.length){ %>
+        <div class="panel panel-default" style="margin-right: 10px;">
+            <div class="panel-body">
+                <% movies.map(item=>{%>
+                <div class="thumbnail">
+                    <a href="<%= '/admin/movie/detail/' + item._id%>">
+                        <% if(item.poster.indexOf('http')!==-1){ %>
+                        <img src="<%= item.poster %>" alt="<%= item.title %>" width="220" height="312">
+                        <% }else{ %>
+                        <img src="<%= '/upload/' + item.poster %>" alt="<%= item.title %>" width="220">
+                        <% } %>
+                    </a>
+                    <div class="caption">
+                        <h4 class="movie-name"><%= item.title %></h4>
+                    </div>
+                </div>
+                <%}) %>
+            </div>
+        </div>
+        <%}%>
+    </div>
+</div>
+
+<ul class="pagination">
+    <% for(let i=0; i<totalPage; i++){ %>
+        <% if(currentPage === (i+1)){ %>
+        <li class="active">
+            <span><%= currentPage %></span>
+        </li>
+        <%}else{%>
+        <li>
+            <a href="<%= `/results?${query}&p=${i}` %>"><%= i+1 %></a>
+        </li>
+        <% } %>
+    <% } %>
+</ul>
+
+
+
+<style>
+    .panel {
+        width: 100%;
+    }
+
+    .panel-body {
+        font-size: 0;
+    }
+
+    .movie-name {
+        padding-left: 12px;
+        font-size: 16px;
+        margin: 0;
+        line-height: 36px;
+    }
+
+    .thumbnail {
+        display: inline-block;
+        border: 1px solid #eee;
+        margin-bottom: 20px;
+        margin-right: 20px;
+    }
+</style>

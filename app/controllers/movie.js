@@ -5,6 +5,7 @@ const _ = require('lodash')
 const fs = require('fs')
 const path = require('path')
 const util = require('util')
+const api = require('../api')
 
 const readFileAsync = util.promisify(fs.readFile)
 const writeFileAsync = util.promisify(fs.writeFile)
@@ -33,11 +34,11 @@ exports.show = async (ctx, next) => {
     let movie = {};
 
     if (_id) {
-        movie = await Movie.findOne({ _id })
+        movie = await api.movie.findMovieById(_id)
         title = '电影修改'
     }
 
-    let categories = await Category.find({})
+    let categories = await api.movie.findCategories()
 
     await ctx.render('pages/movie/movie_admin', {
         layout: 'layout',
@@ -62,9 +63,9 @@ exports.new = async (ctx, next) => {
 
     // 查出相应分类
     if (categoryId) {
-        category = await Category.findOne({ _id: categoryId })
+        category = await api.movie.findCategoryById(categoryId)
     } else if (categoryName) {
-        category = await Category.findOne({ name: categoryName })
+        category = await api.movie.findCategory({ name: categoryName })
         if (!category) {
             // 没有就新增分类
             category = new Category({ name: categoryName })
@@ -74,7 +75,7 @@ exports.new = async (ctx, next) => {
 
     // 电影关联分类
     if (movieData._id) {
-        movie = await Movie.findOne({ _id: movieData._id })
+        movie = await api.movie.findMovieById(movieData._id)
     }
     if (movie) {
         movie = _.extend(movie, movieData)
@@ -108,7 +109,7 @@ exports.new = async (ctx, next) => {
 
 // 3.电影的后台列表
 exports.list = async (ctx, next) => {
-    const movies = await Movie.find({}).populate('category', 'name')
+    const movies = await api.movie.findMoviesWidthPopulate('category', 'name')
 
     await ctx.render('/pages/movie/movie_list', {
         layout: 'layout',
@@ -125,7 +126,7 @@ exports.del = async (ctx, next) => {
     let _id = ctx.query.id
 
     // 同步删除分类下的该电影
-    const cat = await Category.findOne({
+    const cat = await api.movie.findCategory({
         movies: {
             $in: [_id]
         }
@@ -153,13 +154,52 @@ exports.del = async (ctx, next) => {
 
 // 详情页
 exports.detail = async (ctx, next) => {
-    let _id = ctx.params.id;
-    let movie = await Movie.findOne({ _id });
+    let _id = ctx.params.id
+    let movie = await api.movie.findMovieById(_id)
     // pv加一操作
-    await Movie.update({ _id }, { $inc: { pv: 1 } });
+    await Movie.update({ _id }, { $inc: { pv: 1 } })
     await ctx.render("pages/movie/movie_detail", {
         layout: 'layout',
         title: '电影详情',
         movie
     });
+}
+
+// 电影搜索功能
+exports.search = async (ctx, next) => {
+    const { cat: catId, q, p } = ctx.query
+    const page = parseInt(p, 10) || 0
+    const count = 2
+    const index = page * count
+
+    if (catId) {
+        const categories = await api.movie.searchByCategory(catId)
+        const category = categories[0]
+        let movies = category.movies || []
+        let results = movies.slice(index, index + count)
+
+        await ctx.render('pages/search/result', {
+            layout: 'layout',
+            title: '分类搜索结果',
+            keyword: category.name,
+            currentPage: page + 1,
+            query: 'cat=' + catId,
+            totalPage: Math.ceil(movies.length / count),
+            movies: results
+        })
+    } else {
+        let movies = await api.movie.searchMoviesByKeyword(q)
+        let results = movies.slice(index, index + count)
+
+        await ctx.render('pages/search/result', {
+            layout: 'layout',
+            title: '关键词搜索结果',
+            keyword: q,
+            currentPage: page + 1,
+            query: 'cat=' + catId,
+            totalPage: Math.ceil(movies.length / count),
+            movies: results,
+        })
+    }
+
 }

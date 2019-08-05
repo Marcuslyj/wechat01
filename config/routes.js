@@ -16,6 +16,9 @@ module.exports = router => {
     router.post('/user/signin', User.signin)
     router.get('/logout', User.logout)
 
+    // 搜索
+    router.get('/results', Movie.search)
+
     // 后台的用户列表页
     // 权限控制
     router.get('/admin/user/list', User.signinRequired, User.adminRequired, User.userlist)

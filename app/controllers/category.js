@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Category = mongoose.model('Category')
 const Movie = mongoose.model('Movie')
+const api = require('../api')
 
 // 0.电影分类Model创建
 // 1.电影分类的录入页面
@@ -10,7 +11,7 @@ exports.show = async (ctx, next) => {
     let category = {};
 
     if (_id) {
-        category = await Category.findOne({ _id })
+        category = await api.movie.findCategoryById(_id)
         title = "分类修改"
     }
 
@@ -26,7 +27,7 @@ exports.new = async (ctx, next) => {
     let category
 
     if (_id) {
-        category = await Category.findOne({ _id })
+        category = await api.movie.findCategoryById(_id)
     }
 
     if (category) {
@@ -41,7 +42,7 @@ exports.new = async (ctx, next) => {
 
 // 3.电影分类的后台列表
 exports.list = async (ctx, next) => {
-    const categories = await Category.find({})
+    const categories = await api.movie.findCategories()
 
     await ctx.render('/pages/category/category_list', {
         layout: 'layout',
