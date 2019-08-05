@@ -12,6 +12,7 @@
                     <th>国家</th>
                     <th>上映</th>
                     <th>修改</th>
+                    <th>浏览量</th>
                     <th>删除</th>
                     <th>录入时间</th>
                 </tr>
@@ -27,6 +28,7 @@
                     <td><%= item.country %></td>
                     <td><%= item.year %></td>
                     <td><a target="_blank" href="<%= '/admin/movie/update/'+ item._id %>">修改</a></td>
+                    <td><%= item.pv %></td>
                     <td>
                         <button type="button" class="btn btn-danger del" data-id="<%= item._id %>">删除</button>
                     </td>

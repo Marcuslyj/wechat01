@@ -28,18 +28,20 @@ exports.savePoster = async (ctx, next) => {
 // 0.电影Model创建
 // 1.电影的录入页面
 exports.show = async (ctx, next) => {
+    let title = '电影录入'
     const { _id } = ctx.params
     let movie = {};
 
     if (_id) {
         movie = await Movie.findOne({ _id })
+        title = '电影修改'
     }
 
     let categories = await Category.find({})
 
     await ctx.render('pages/movie/movie_admin', {
         layout: 'layout',
-        title: '后台电影页面',
+        title,
         movie,
         categories
     })
@@ -107,7 +109,7 @@ exports.list = async (ctx, next) => {
 
     await ctx.render('/pages/movie/movie_list', {
         layout: 'layout',
-        title: '电影的列表页面',
+        title: '电影列表',
         movies
     })
 }
@@ -136,10 +138,11 @@ exports.del = async (ctx, next) => {
 exports.detail = async (ctx, next) => {
     let _id = ctx.params.id;
     let movie = await Movie.findOne({ _id });
-    // await Movie.update({ _id }, { $inc: { pv: 1 } });
+    // pv加一操作
+    await Movie.update({ _id }, { $inc: { pv: 1 } });
     await ctx.render("pages/movie/movie_detail", {
-        layout:'layout',
-        title: '电影详情页面',
+        layout: 'layout',
+        title: '电影详情',
         movie
     });
 }

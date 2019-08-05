@@ -4,16 +4,18 @@ const Category = mongoose.model('Category')
 // 0.电影分类Model创建
 // 1.电影分类的录入页面
 exports.show = async (ctx, next) => {
+    let title = "分类录入"
     const { _id } = ctx.params
     let category = {};
 
     if (_id) {
         category = await Category.findOne({ _id })
+        title = "分类修改"
     }
 
     await ctx.render('pages/category/category_admin', {
         layout: 'layout',
-        title: '后台登录分类页面',
+        title,
         category
     })
 }
@@ -42,7 +44,7 @@ exports.list = async (ctx, next) => {
 
     await ctx.render('/pages/category/category_list', {
         layout: 'layout',
-        title: '分类的列表页面',
+        title: '分类列表',
         categories
     })
 }

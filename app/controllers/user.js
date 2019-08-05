@@ -5,14 +5,14 @@ const User = mongoose.model('User')
 exports.showSignup = async (ctx, next) => {
     await ctx.render('pages/user/signup', {
         layout: 'layout',
-        title: '注册页面',
+        title: '用户注册',
     })
 }
 // 2.增加一个登录页面的控制器 showSignin
 exports.showSignin = async (ctx, next) => {
     await ctx.render('pages/user/signin', {
         layout: 'layout',
-        title: '登录页面',
+        title: '用户登录页面',
     })
 }
 // 3.用户数据持久化 signup
@@ -88,7 +88,7 @@ exports.userlist = async (ctx, next) => {
     const users = await User.find({}).sort('meta.updatedAt')
 
     await ctx.render('pages/user/userlist', {
-        title: '用户列表页面',
+        title: '用户列表',
         layout: 'layout',
         users
     })
