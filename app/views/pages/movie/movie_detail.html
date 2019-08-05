@@ -2,7 +2,7 @@
     <% if(movie && movie.title){%>
     <div class="row">
         <div class="col-md-7">
-            <% if(movie.poster.indexOf('http')>-1){ %>
+            <% if(movie.poster.indexOf('http')!==-1){ %>
             <img src="<%= movie.poster %>" alt="<%= movie.title %>">
             <% }else{ %>
             <img src="<%= '/upload/' + movie.poster %>" alt="<%= movie.title %>">

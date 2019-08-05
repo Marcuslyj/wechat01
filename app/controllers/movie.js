@@ -16,15 +16,9 @@ exports.savePoster = async (ctx, next) => {
     if (fileName) {
         const data = await readFileAsync(filePath)
         const timestamp = Date.now()
-        console.log('====================================');
-        console.log(posterData.type);
-        console.log('====================================');
         const type = posterData.type.split('/')[1]
         const poster = timestamp + '.' + type
         const newPath = path.resolve(__dirname, '../../', 'public/upload', poster)
-        console.log('====================================');
-        console.log(newPath);
-        console.log('====================================');
         await writeFileAsync(newPath, data)
         ctx.poster = poster
     }
@@ -140,10 +134,11 @@ exports.del = async (ctx, next) => {
 
 // 详情页
 exports.detail = async (ctx, next) => {
-    let _id = ctx.params._id;
+    let _id = ctx.params.id;
     let movie = await Movie.findOne({ _id });
     // await Movie.update({ _id }, { $inc: { pv: 1 } });
     await ctx.render("pages/movie/movie_detail", {
+        layout:'layout',
         title: '电影详情页面',
         movie
     });
