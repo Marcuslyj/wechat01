@@ -13,18 +13,16 @@
             </div>
             <div class="panel-body">
                 <% cat.movies.map(item=>{%>
-                <div class="">
-                    <div class="thumbnail">
-                        <a href="<%= '/admin/movie/detail/' + item._id%>">
-                            <% if(item.poster.indexOf('http')!==-1){ %>
-                            <img src="<%= item.poster %>" alt="<%= item.title %>" width="220" height="312">
-                            <% }else{ %>
-                            <img src="<%= '/upload/' + item.poster %>" alt="<%= item.title %>" width="220">
-                            <% } %>
-                        </a>
-                        <div class="caption">
-                            <h4 class="movie-name"><%= item.title %></h4>
-                        </div>
+                <div class="thumbnail">
+                    <a href="<%= '/admin/movie/detail/' + item._id%>">
+                        <% if(item.poster.indexOf('http')!==-1){ %>
+                        <img src="<%= item.poster %>" alt="<%= item.title %>" width="220" height="312">
+                        <% }else{ %>
+                        <img src="<%= '/upload/' + item.poster %>" alt="<%= item.title %>" width="220">
+                        <% } %>
+                    </a>
+                    <div class="caption">
+                        <h4 class="movie-name"><%= item.title %></h4>
                     </div>
                 </div>
                 <%}) %>
@@ -37,14 +35,18 @@
 </div>
 
 <style>
-.panel-body{
-    border:1px solid #eee;
-    margin-bottom: 20px;
+.panel{
+    width: 100%;
 }
 .movie-name{
     padding-left: 12px;
     font-size: 16px;
     margin: 0;
     line-height: 36px;
+}
+.thumbnail{
+    display: inline-block;
+    border:1px solid #eee;
+    margin-bottom: 20px;
 }
 </style>
