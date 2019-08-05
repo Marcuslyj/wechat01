@@ -1,22 +1,32 @@
 <% var user; %>
 
-<div class="navbar navbar-default navbar-fixed-bottom">
+<div class="navbar navbar-light bg-light navbar-fixed-bottom">
     <div class="container">
-        <div class="navbar-header" style="width:100%;">
-            <a href="/" class="navbar-brand">时光的余热</a>
-            <% if(user && user.nickname){ %>
-            <p class="navbar-text navbar-right float-right">
-                <span>欢迎您，<%= user.nickname %></span>
-                <span>&nbsp;|&nbsp;</span>
-                <a href="/logout" class="navbar-link">登出</a>
-            </p>
-            <% }else{ %>
-            <p class="navbar-text navbar-right float-right">
-                <a href="#" data-toggle="modal" data-target="#signupModal" class="navbar-link">注册</a>
-                <span>&nbsp;|&nbsp;</span>
-                <a href="#" class="navbar-link" data-toggle="modal" data-target="#signinModal">登录</a>
-            </p>
-            <% } %>
+        <div class="navbar-header" style="width:100%;display: flex;">
+            <form action="/results" method="GET" class="form-inline" style="flex: 1;display: flex;">
+                <a href="/" class="navbar-brand" style="flex: 0;">时光的余热</a>
+                <div class="input-group" style="flex: 1;max-width: 300px;padding-right: 10px;">
+                    <input type="text" class="form-control" name="q">
+                    <span class="input-group-btn" style="margin-left: 10px;">
+                        <button class="btn btn-default">搜索</button>
+                    </span>
+                </div>
+            </form>
+            <div style="flex: 0;">
+                <% if(user && user.nickname){ %>
+                <p class="navbar-text navbar-right float-right" style="margin:0;min-width: 200px;">
+                    <span>欢迎您，<%= user.nickname %></span>
+                    <span>&nbsp;|&nbsp;</span>
+                    <a href="/logout" class="navbar-link">登出</a>
+                </p>
+                <% }else{ %>
+                <p class="navbar-text navbar-right float-right">
+                    <a href="#" data-toggle="modal" data-target="#signupModal" class="navbar-link">注册</a>
+                    <span>&nbsp;|&nbsp;</span>
+                    <a href="#" class="navbar-link" data-toggle="modal" data-target="#signinModal">登录</a>
+                </p>
+                <% } %>
+            </div>
         </div>
     </div>
 </div>
@@ -73,3 +83,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    .navbar {
+        border: 1px solid #eee;
+    }
+</style>
