@@ -64,9 +64,12 @@ exports.new = async (ctx, next) => {
     if (categoryId) {
         category = await Category.findOne({ _id: categoryId })
     } else if (categoryName) {
-        // 没有就新增分类
-        category = new Category({ name: categoryName })
-        await category.save()
+        category = await Category.findOne({ name: categoryName })
+        if (!category) {
+            // 没有就新增分类
+            category = new Category({ name: categoryName })
+            await category.save()
+        }
     }
 
     // 电影关联分类
@@ -119,18 +122,32 @@ exports.list = async (ctx, next) => {
 
 // 删除电影数据
 exports.del = async (ctx, next) => {
-    let _id = ctx.query.id;
+    let _id = ctx.query.id
 
+    // 同步删除分类下的该电影
+    const cat = await Category.findOne({
+        movies: {
+            $in: [_id]
+        }
+    })
+
+    if (cat && cat.movies && cat.movies.length) {
+        const index = cat.movies.indexOf(_id)
+        cat.movies.splice(index, 1)
+        await cat.save()
+    }
+
+    // 删除电影
     try {
-        await Movie.deleteOne({ _id });
+        await Movie.deleteOne({ _id })
         ctx.body = {
             success: true,
-        };
+        }
     } catch (error) {
-        console.log(error);
+        console.log(error)
         ctx.body = {
             success: false,
-        };
+        }
     }
 }
 

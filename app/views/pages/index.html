@@ -4,20 +4,20 @@
     <div class="row">
         <% if(categories && categories.length){%>
         <% categories.map(cat=>{ %>
-        <div class="panel panel-default">
+        <% if(cat.movies && cat.movies.length){ %>
+        <div class="panel panel-default" style="margin-right: 10px;">
             <div class="panel-heading">
                 <h3>
                     <a href="<%= '/result?cat=' + cat._id + '&p=0' %>"><%= cat.name %></a>
                 </h3>
             </div>
             <div class="panel-body">
-                <% if(cat.movies && cat.movies.length){ %>
                 <% cat.movies.map(item=>{%>
-                <div class="col-md-3">
+                <div class="">
                     <div class="thumbnail" style="height: 475px;">
-                        <a href="<%= '/movie/detail' + item._id%>">
+                        <a href="<%= '/admin/movie/detail/' + item._id%>">
                             <% if(item.poster.indexOf('http')!==-1){ %>
-                            <img src="<%= item.poster %>" alt="<%= item.title %>" width="220">
+                            <img src="<%= item.poster %>" alt="<%= item.title %>" width="220" height="312">
                             <% }else{ %>
                             <img src="<%= '/upload/' + item.poster %>" alt="<%= item.title %>" width="220">
                             <% } %>
@@ -31,11 +31,10 @@
                     </div>
                 </div>
                 <%}) %>
-                <%}%>
             </div>
         </div>
+        <%}%>
         <% }) %>
-                <%}%>
+        <%}%>
     </div>
 </div>
-

@@ -2,6 +2,9 @@
 
 <div class="container">
     <div class="row">
+        <a href="/admin/movie">
+            <button class="btn btn-success">新增</button>
+        </a>
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
@@ -23,7 +26,8 @@
                 <tr class="<%= 'item-id-' + item._id %>">
                     <td><%= item.category ? item.category.name : '' %></td>
                     <td><%= item.title %></td>
-                    <td><img src="<%= (item.poster.indexOf('http') !== -1) ? item.poster : ('/upload/' + item.poster) %>" width="100" alt=""></td>
+                    <td><img src="<%= (item.poster.indexOf('http') !== -1) ? item.poster : ('/upload/' + item.poster) %>"
+                            width="100" alt=""></td>
                     <td><%= item.director %></td>
                     <td><%= item.country %></td>
                     <td><%= item.year %></td>

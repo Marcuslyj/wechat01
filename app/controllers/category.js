@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Category = mongoose.model('Category')
+const Movie = mongoose.model('Movie')
 
 // 0.电影分类Model创建
 // 1.电影分类的录入页面
@@ -53,17 +54,23 @@ exports.list = async (ctx, next) => {
 
 // 删除分类数据
 exports.del = async (ctx, next) => {
-    let _id = ctx.query.id;
+    let _id = ctx.query.id
 
     try {
-        await Category.deleteOne({ _id });
+        await Category.deleteOne({ _id })
+        // 同步删除目录下的电影
+        await Movie.remove({
+            category: _id
+        })
+
+
         ctx.body = {
             success: true,
         };
     } catch (error) {
-        console.log(error);
+        console.log(error)
         ctx.body = {
             success: false,
-        };
+        }
     }
 }
