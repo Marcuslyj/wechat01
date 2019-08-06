@@ -37,8 +37,8 @@
                         <a href="#comments" class="comment" data-cid="<%= item._id %>" data-tid="<%= item.from._id %>">
                             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+"
                                 alt="" class="media-object" style="width:64px;height:64px;margin-right:10px;">
-                            <div class="media-body">
-                                <h5 class="media-heading"><%= item.from.name %></h5>
+                            <div class="media-body comment-body">
+                                <h5 class="media-heading commenters"><%= item.from.nickname %></h5>
                                 <p><%= item.content %></p>
                                 <% 
                                     if(item.replies && item.replies.length){ 
@@ -47,13 +47,14 @@
                                 <div class="media">
                                     <a href="#comments" class="comment" data-cid="<%= item._id %>"
                                         data-tid="<%= item.from._id %>">
-                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="" class="media-object"
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+"
+                                            alt="" class="media-object"
                                             style="width:64px;height:64px;margin-right:10px;">
-                                        <div class="media-body">
-                                            <h5 class="media-heading">
-                                                |<%= reply.from.name %>
+                                        <div class="media-body comment-body">
+                                            <h5 class="media-heading commenters">
+                                                <%= reply.from.nickname %>
                                                 <span class="text-info">&nbsp;回复&nbsp;</span>
-                                                |<%= reply.to.name %>
+                                                <%= reply.to.nickname %>
                                             </h5>
                                             <p><%= reply.content %></p>
                                         </div>
@@ -125,3 +126,15 @@
         })
     })
 </script>
+
+<style>
+    .commenters.media-heading{
+        display:inline-block;
+        font-size: 12px;
+    }
+    .comment-body, .comment-body a{
+        display: inline-block;
+        color: #333;
+    }
+
+</style>
