@@ -42,7 +42,7 @@ const static = require('koa-static')
         app.use(session(app))
         app.use(bodyparser())
         //静态资源
-        app.use(static(path.resolve(__dirname,'./static')))
+        app.use(static(path.resolve(__dirname, './static')))
 
 
         // 登录信息中间件，   怎么运行的？？？？

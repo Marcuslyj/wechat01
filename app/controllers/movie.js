@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Movie = mongoose.model('Movie')
 const Category = mongoose.model('Category')
+const Comment = mongoose.model('Comment')
 const _ = require('lodash')
 const fs = require('fs')
 const path = require('path')
@@ -156,12 +157,19 @@ exports.del = async (ctx, next) => {
 exports.detail = async (ctx, next) => {
     let _id = ctx.params.id
     let movie = await api.movie.findMovieById(_id)
+    // 查评论
+    let comments = await Comment.find({
+        movie: _id,
+    })
+        .populate('from', '_id nickname')
+        .populate('replies.from replies.to', '_id nickname');
     // pv加一操作
     await Movie.update({ _id }, { $inc: { pv: 1 } })
     await ctx.render("pages/movie/movie_detail", {
         layout: 'layout',
         title: '电影详情',
-        movie
+        movie,
+        comments
     });
 }
 

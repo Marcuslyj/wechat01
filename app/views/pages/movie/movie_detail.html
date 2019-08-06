@@ -1,3 +1,4 @@
+<% var comments; %>
 <div class="container">
     <% if(movie && movie.title){%>
     <div class="row">
@@ -21,7 +22,106 @@
                 <dt>简介</dt>
                 <dt><%= movie.summary %></dt>
             </div>
+
+            <div class="panel-heading">
+                <h4>评论区</h4>
+            </div>
+            <div class="panel-body">
+                <ul class="media-list">
+                    <%
+                        if(comments && comments.length){
+                            comments.map(item=>{
+                                if(item && item.from){
+                        %>
+                    <li class="media">
+                        <a href="#comments" class="comment" data-cid="<%= item._id %>" data-tid="<%= item.from._id %>">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+"
+                                alt="" class="media-object" style="width:64px;height:64px;margin-right:10px;">
+                            <div class="media-body">
+                                <h5 class="media-heading"><%= item.from.name %></h5>
+                                <p><%= item.content %></p>
+                                <% 
+                                    if(item.replies && item.replies.length){ 
+                                        item.replies.map(reply=>{ 
+                                    %>
+                                <div class="media">
+                                    <a href="#comments" class="comment" data-cid="<%= item._id %>"
+                                        data-tid="<%= item.from._id %>">
+                                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="" class="media-object"
+                                            style="width:64px;height:64px;margin-right:10px;">
+                                        <div class="media-body">
+                                            <h5 class="media-heading">
+                                                |<%= reply.from.name %>
+                                                <span class="text-info">&nbsp;回复&nbsp;</span>
+                                                |<%= reply.to.name %>
+                                            </h5>
+                                            <p><%= reply.content %></p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <%
+                                        }) 
+                                    }
+                                    %>
+                            </div>
+                        </a>
+                    </li>
+                    <%
+                                }
+                            }) 
+                        }
+                        %>
+                </ul>
+                <div id="comments">
+                    <form action="/comment" id="commentForm" method='POST'>
+                        <input type="hidden" name="comment[movie]" value="<%= movie._id %>">
+                        <% if(user){ %>
+                        <input type="hidden" name="comment[from]" value="<%= user._id %>">
+                        <input type="hidden" id="toId" name="comment[tid]">
+                        <input type="hidden" id="commentId" name="comment[cid]">
+                        <% } %>
+                        <div class="form-group">
+                            <textarea name="comment[content]" class="form-control" rows="4"></textarea>
+                        </div>
+                        <% if(user && user._id){ %>
+                        <button id="commentSubmit" class="btn btn-primary" type="submit">提交评论</button>
+                        <% }else{ %>
+                        <a href="#" class="navbar-link" data-toggle="modal" data-target="#signinModal">登录后再评论</a>
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
     <%}%>
 </div>
+
+<script>
+    $(function () {
+        $('.comment').click(function (e) {
+            var target = $(this)
+            var told = target.data('tid')
+            var commentId = target.data('cid')
+
+            $('#toId').val(told)
+            $('#commentId').val(commentId)
+        })
+
+
+        $('#commentSubmit').click(function (e) {
+            e.preventDefault()
+
+            $.ajax({
+                type: 'POST',
+                url: '/comment',
+                data: $('#commentForm').serialize()
+            }).done(function (results) {
+                if (results.success) {
+                    window.location.reload()
+                }
+            })
+
+        })
+    })
+</script>

@@ -4,6 +4,7 @@ const Index = require('../app/controllers/index.js')
 const Category = require('../app/controllers/category.js')
 const Movie = require('../app/controllers/movie.js')
 const koaBody = require('koa-body')
+const Comment = require('../app/controllers/comment.js')
 
 module.exports = router => {
     // 首页
@@ -53,6 +54,9 @@ module.exports = router => {
 
     // 微信sdk调用页
     router.get('/sdk', Wechat.sdk)
+
+    // 评论
+    router.post('/comment', User.signinRequired, Comment.save)
 
 
 }
