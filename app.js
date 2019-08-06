@@ -44,6 +44,11 @@ const static = require('koa-static')
         //静态资源
         app.use(static(path.resolve(__dirname, './static')))
 
+        // 植入两个中间件，做前置的微信环境检查、跳转、回调的用户数据存储和状态同步
+        const wechatController = require('./app/controllers/wechat')
+        app.use(wechatController.checkWechat)
+        app.use(wechatController.wechatRedirect)
+
 
         // 登录信息中间件，   怎么运行的？？？？
         app.use(async (ctx, next) => {
